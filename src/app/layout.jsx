@@ -1,4 +1,6 @@
 import './globals.css';
+import { MantineProvider, createTheme } from '@mantine/core';
+import '@mantine/core/styles.css';
 
 export const metadata = {
   title: 'Dota 2 Replays',
@@ -8,7 +10,9 @@ export const metadata = {
 export default function RootLayout({ children }) {
   return (
     <html lang="en">
-      <body>{children}</body>
+      <body>
+        <MantineProvider>{children}</MantineProvider>
+      </body>
     </html>
   );
 }
