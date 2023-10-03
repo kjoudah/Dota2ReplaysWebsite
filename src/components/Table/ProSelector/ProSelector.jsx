@@ -15,7 +15,6 @@ export default function ProSelector({ proList }) {
     fetcher
   );
 
-  useDebugValue;
   async function getProPlayerReplays(proList) {
     if (pros.length != 0) {
       setShouldFetch(true);
@@ -29,6 +28,8 @@ export default function ProSelector({ proList }) {
         placeholder="Pick value"
         data={proList}
         onChange={setPros}
+        clearable
+        hidePickedOptions
       />
       <Button onClick={() => getProPlayerReplays()} variant="filled">
         Get Replays
