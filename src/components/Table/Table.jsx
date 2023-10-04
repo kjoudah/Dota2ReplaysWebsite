@@ -1,25 +1,27 @@
-'use client';
-
-import { Table } from '@mantine/core';
+import { Button, Table } from '@mantine/core';
 import Link from 'next/link';
 
 export default function ReplayResultsTable({ data }) {
   const elements = data.map(element => {
     return (
       <Table.Tr key={element['match-id']}>
-        <Link href={`/matches/${element['match-id']}`}>
-          <Table.Td>{element.name}</Table.Td>
-          <Table.Td>{element.hero}</Table.Td>
-          <Table.Td>{element.pwh}</Table.Td>
-          <Table.Td>{element.pah}</Table.Td>
-          <Table.Td>{element.won === '1' ? 'Won' : 'Lost'}</Table.Td>
-          <Table.Td>{element['match-id']}</Table.Td>
-        </Link>
+        <Table.Td>{element.name}</Table.Td>
+        <Table.Td>{element.hero}</Table.Td>
+        <Table.Td>{element.pwh}</Table.Td>
+        <Table.Td>{element.pah}</Table.Td>
+        <Table.Td>{element.won === '1' ? 'Won' : 'Lost'}</Table.Td>
+        <Table.Td>{element['match-id']}</Table.Td>
+        <Table.Td>
+          <Link href={`/matches/${element['match-id']}`}>
+            {' '}
+            <Button>Details</Button>
+          </Link>
+        </Table.Td>
       </Table.Tr>
     );
   });
   return (
-    <Table>
+    <Table highlightOnHover>
       <Table.Thead>
         <Table.Tr>
           <Table.Th>Player name</Table.Th>

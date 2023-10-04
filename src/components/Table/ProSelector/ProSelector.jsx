@@ -1,25 +1,29 @@
 'use client';
 
 import { MultiSelect, Button, Loader } from '@mantine/core';
-import { useDebugValue, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
+import useSWRMutation from 'swr/mutation';
 import ReplayResultsTable from '../Table';
-import useSWR from 'swr';
 
 const fetcher = (...args) => fetch(...args).then(res => res.json());
 
 export default function ProSelector({ proList }) {
   const [pros, setPros] = useState([]);
-  const [shouldFetch, setShouldFetch] = useState(false);
-  const { data, error, isLoading } = useSWR(
-    shouldFetch ? `./replays?players=${pros.join(',')}` : null,
+
+  const { trigger, data, isMutating } = useSWRMutation(
+    `./replays?players=${pros.join(',')}`,
     fetcher
   );
 
   async function getProPlayerReplays(proList) {
     if (pros.length != 0) {
-      setShouldFetch(true);
+      trigger();
     }
   }
+
+  useEffect(() => {
+    console.log(pros);
+  }, [pros]);
 
   return (
     <>
@@ -35,8 +39,7 @@ export default function ProSelector({ proList }) {
         Get Replays
       </Button>
       {data && <ReplayResultsTable data={data} />}
-      {isLoading && <Loader color="blue" />}
-      {error && <div>error</div>}
+      {isMutating && <Loader color="blue" />}
     </>
   );
 }
