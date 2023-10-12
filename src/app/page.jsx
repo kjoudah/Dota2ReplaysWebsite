@@ -1,4 +1,4 @@
-import ProSelector from '@/components/Table/ProSelector/ProSelector';
+import ProSelector from '@/components/ProSelector/ProSelector';
 
 const proList = [
   'Sumail',

@@ -3,7 +3,7 @@
 import { MultiSelect, Button, Loader } from '@mantine/core';
 import { useEffect, useState } from 'react';
 import useSWRMutation from 'swr/mutation';
-import ReplayResultsTable from '../Table';
+import ReplayResultsTable from '../ReplayResultsTable/ReplayResultsTable';
 
 const fetcher = (...args) => fetch(...args).then(res => res.json());
 
@@ -22,8 +22,8 @@ export default function ProSelector({ proList }) {
   }
 
   useEffect(() => {
-    console.log(pros);
-  }, [pros]);
+    console.log(data);
+  }, [data]);
 
   return (
     <>
