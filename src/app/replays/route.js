@@ -1,7 +1,8 @@
 import { NextResponse } from 'next/server';
 import * as cheerio from 'cheerio';
+import { getPubMatchesForProsFromD2PT } from '../service/D2PTScraper';
 
-async function getPubMatchesForPro(playerList) {
+async function getMatchIdsForPros(playerList) {
   return Promise.all(
     playerList.map(player => {
       return fetch(
@@ -20,7 +21,8 @@ async function getPubMatchesForPro(playerList) {
 
               return {
                 'match-id': matchId,
-                ...row.attribs,
+                hero: row.attribs.hero,
+                player: row.attribs.name,
               };
             })
             .get();
@@ -32,7 +34,7 @@ async function getPubMatchesForPro(playerList) {
 export async function GET(request) {
   const searchParams = request.nextUrl.searchParams;
   const players = searchParams.get('players').split(',');
-  const prosJson = await getPubMatchesForPro(players);
+  const d2PTData = await getPubMatchesForProsFromD2PT(players);
 
-  return NextResponse.json(prosJson.flat());
+  return NextResponse.json(d2PTData.flat());
 }
