@@ -2,32 +2,26 @@ import { Button, Table } from '@mantine/core';
 import Link from 'next/link';
 import Image from 'next/image';
 
-function getHeroIconLink(heroName) {
-  const lowercaseName = heroName
-    .split(' ')
-    .map(string => string.toLowerCase())
-    .join('_');
-  return `https://cdn.stratz.com/images/dota2/heroes/${lowercaseName}_icon.png`;
+function getResource(resourceLink) {
+  console.log(`https://dota2protracker.com${resourceLink}`);
+  return `https://dota2protracker.com${resourceLink}`;
 }
 
 function getIconsForTeam(team) {
   return (
     <ul className="flex flex-row">
-      {team
-        .split(',')
-        .map(string => string.toLowerCase())
-        .map(hero => {
-          return (
-            <li key={hero}>
-              <Image
-                width={50}
-                height={50}
-                alt={`${hero}`}
-                src={getHeroIconLink(hero)}
-              ></Image>
-            </li>
-          );
-        })}
+      {team.map(hero => {
+        return (
+          <li key={hero}>
+            <Image
+              width={50}
+              height={50}
+              alt={`${hero}`}
+              src={getResource(hero)}
+            ></Image>
+          </li>
+        );
+      })}
     </ul>
   );
 }
@@ -35,22 +29,22 @@ function getIconsForTeam(team) {
 export default function ReplayResultsTable({ data }) {
   const elements = data.map(element => {
     return (
-      <Table.Tr key={element['match-id']}>
-        <Table.Td>{element.name}</Table.Td>
+      <Table.Tr key={element.matchId}>
+        <Table.Td>{element.player}</Table.Td>
         <Table.Td>
           <Image
             width={50}
             height={50}
-            alt={`${element.hero}`}
-            src={getHeroIconLink(element.hero)}
+            alt={`${element.playerHero.heroName}`}
+            src={getResource(element.playerHero.heroIcon)}
           ></Image>
         </Table.Td>
-        <Table.Td>{getIconsForTeam(element.pwh)}</Table.Td>
-        <Table.Td>{getIconsForTeam(element.pah)}</Table.Td>
-        <Table.Td>{element.won === '1' ? 'Won' : 'Lost'}</Table.Td>
-        <Table.Td>{element['match-id']}</Table.Td>
+        <Table.Td>{getIconsForTeam(element.radiantHeros)}</Table.Td>
+        <Table.Td>{getIconsForTeam(element.direHeros)}</Table.Td>
+        <Table.Td>{element.result}</Table.Td>
+        <Table.Td>{element.matchId}</Table.Td>
         <Table.Td>
-          <Link href={`https://stratz.com/matches/${element['match-id']}`}>
+          <Link href={`https://stratz.com/matches/${element.matchId}`}>
             {' '}
             <Button>Details</Button>
           </Link>

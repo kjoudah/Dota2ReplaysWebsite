@@ -4,9 +4,9 @@ const nextConfig = {
     remotePatterns: [
       {
         protocol: 'https',
-        hostname: 'cdn.stratz.com',
+        hostname: 'dota2protracker.com',
         port: '',
-        pathname: '/images/dota2/heroes/**',
+        pathname: '/**',
       },
     ],
   },

@@ -21,10 +21,6 @@ export default function ProSelector({ proList }) {
     }
   }
 
-  useEffect(() => {
-    console.log(data);
-  }, [data]);
-
   return (
     <>
       <MultiSelect
