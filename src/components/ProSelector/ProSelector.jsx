@@ -1,7 +1,7 @@
 'use client';
 
-import { MultiSelect, Button, Loader } from '@mantine/core';
-import { useEffect, useState } from 'react';
+import { MultiSelect, Button, Loader, Container } from '@mantine/core';
+import { useState } from 'react';
 import useSWRMutation from 'swr/mutation';
 import ReplayResultsTable from '../ReplayResultsTable/ReplayResultsTable';
 
@@ -22,7 +22,7 @@ export default function ProSelector({ proList }) {
   }
 
   return (
-    <>
+    <Container size={'lg'}>
       <MultiSelect
         label="Choose Pros"
         placeholder="Pick value"
@@ -36,6 +36,6 @@ export default function ProSelector({ proList }) {
       </Button>
       {data && <ReplayResultsTable data={data} />}
       {isMutating && <Loader color="blue" />}
-    </>
+    </Container>
   );
 }
