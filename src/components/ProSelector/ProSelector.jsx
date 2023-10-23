@@ -1,41 +1,62 @@
 'use client';
 
-import { MultiSelect, Button, Loader, Container } from '@mantine/core';
-import { useState } from 'react';
+import { MultiSelect, Loader, Flex, Group } from '@mantine/core';
+import { useEffect, useState } from 'react';
 import useSWRMutation from 'swr/mutation';
 import ReplayResultsTable from '../ReplayResultsTable/ReplayResultsTable';
+import MultipleSelect from '../MultipleSelect/MultipleSelect';
+import { Container, Stack, Button, LinearProgress } from '@mui/material';
 
 const fetcher = (...args) => fetch(...args).then(res => res.json());
 
 export default function ProSelector({ proList }) {
-  const [pros, setPros] = useState([]);
+  const [selectedPros, setSelectedPros] = useState([]);
 
   const { trigger, data, isMutating } = useSWRMutation(
-    `./replays?players=${pros.join(',')}`,
+    `./replays?players=${selectedPros.join(',')}`,
     fetcher
   );
 
   async function getProPlayerReplays(proList) {
-    if (pros.length != 0) {
+    if (selectedPros.length != 0) {
       trigger();
     }
   }
 
   return (
-    <Container size={'lg'}>
-      <MultiSelect
-        label="Choose Pros"
-        placeholder="Pick value"
-        data={proList}
-        onChange={setPros}
-        clearable
-        hidePickedOptions
-      />
-      <Button onClick={() => getProPlayerReplays()} variant="filled">
-        Get Replays
-      </Button>
-      {data && <ReplayResultsTable data={data} />}
-      {isMutating && <Loader color="blue" />}
+    <Container maxWidth="lg">
+      <Stack direction="column" justifyContent="center" alignItems="center">
+        <Stack
+          direction="row"
+          justifyContent="center"
+          alignItems="center"
+          spacing={2}
+        >
+          <MultipleSelect
+            data={proList}
+            onMultiSelectChange={data => {
+              setSelectedPros(data);
+            }}
+          ></MultipleSelect>
+          <Button
+            sx={{
+              p: 2,
+            }}
+            variant="contained"
+            onClick={() => getProPlayerReplays()}
+          >
+            Get Replays
+          </Button>
+        </Stack>
+        {isMutating && (
+          <LinearProgress
+            sx={{
+              width: 800,
+            }}
+          />
+        )}
+        {data && <ReplayResultsTable data={data} />}
+      </Stack>
     </Container>
   );
 }

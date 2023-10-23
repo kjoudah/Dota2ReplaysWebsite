@@ -1,10 +1,11 @@
+'use client';
 import '@mantine/core/styles.css';
-import { MantineProvider, ColorSchemeScript } from '@mantine/core';
+import { MantineProvider, ColorSchemeScript, AppShell } from '@mantine/core';
 
-export const metadata = {
-  title: 'Dota 2 Replays',
-  description: 'Dota 2 Replays of your favourite pro!',
-};
+// export const metadata = {
+//   title: 'Dota 2 Replays',
+//   description: 'Dota 2 Replays of your favourite pro!',
+// };
 
 export default function RootLayout({ children }) {
   return (
@@ -13,7 +14,11 @@ export default function RootLayout({ children }) {
         <ColorSchemeScript />
       </head>
       <body>
-        <MantineProvider>{children}</MantineProvider>
+        <MantineProvider>
+          <AppShell>
+            <AppShell.Main>{children}</AppShell.Main>
+          </AppShell>
+        </MantineProvider>
       </body>
     </html>
   );
