@@ -4,6 +4,7 @@ import { MultiSelect, Loader, Flex, Group } from '@mantine/core';
 import { useEffect, useState } from 'react';
 import useSWRMutation from 'swr/mutation';
 import ReplayResultsTable from '../ReplayResultsTable/ReplayResultsTable';
+import ReplayResultsTableMUI from '../ReplayResultsTable/ReplayResultsTableMUI';
 import MultipleSelect from '../MultipleSelect/MultipleSelect';
 import { Container, Stack, Button, LinearProgress } from '@mui/material';
 
@@ -55,7 +56,8 @@ export default function ProSelector({ proList }) {
             }}
           />
         )}
-        {data && <ReplayResultsTable data={data} />}
+        {/* {data && <ReplayResultsTable data={data} />} */}
+        {data && <ReplayResultsTableMUI data={data} />}
       </Stack>
     </Container>
   );

@@ -15,7 +15,7 @@ export async function getPubMatchesForProsFromD2PT(playerList) {
           return data
             .slice(1)
             .map((i, row) => {
-              const matchId = $(row).find('td.td-copy a')[0].attribs.data;
+              const id = $(row).find('td.td-copy a')[0].attribs.data;
               const mmr = $(row).find('td.td-mmr').get()[0].children[0].data;
               const heroName = row.attribs.hero;
               const heroIcon = $(row)
@@ -61,7 +61,7 @@ export async function getPubMatchesForProsFromD2PT(playerList) {
                 });
 
               return {
-                matchId,
+                id,
                 mmr,
                 playerHero: {
                   heroName: heroName,
