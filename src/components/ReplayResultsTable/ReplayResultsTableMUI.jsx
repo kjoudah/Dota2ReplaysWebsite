@@ -2,10 +2,15 @@ import * as React from 'react';
 import Box from '@mui/material/Box';
 import { DataGrid } from '@mui/x-data-grid';
 import Image from 'next/image';
-import { ImageList, ImageListItem, Stack } from '@mui/material';
+import { Button, ImageList, ImageListItem, Stack, Grid } from '@mui/material';
+import Link from 'next/link';
 
 function getResource(resourceLink) {
   return `https://dota2protracker.com${resourceLink}`;
+}
+
+function getStratzLink(matchId) {
+  return `https://stratz.com/matches/${matchId}`;
 }
 
 function getTeamIconList(items) {
@@ -26,7 +31,7 @@ function getTeamIconList(items) {
 
 function getItemIconList(items) {
   return (
-    <Stack spacing={1} direction="row">
+    <Grid spacing={1} wrap="wrap" direction="row">
       {items.map(item => (
         <Image
           key={item}
@@ -36,7 +41,7 @@ function getItemIconList(items) {
           src={getResource(item.src)}
         />
       ))}
-    </Stack>
+    </Grid>
   );
 }
 
@@ -44,7 +49,6 @@ const columns = [
   {
     field: 'player',
     headerName: 'Player Name',
-    width: 150,
     editable: false,
   },
   {
@@ -52,6 +56,7 @@ const columns = [
     headerName: 'Player Hero',
     width: 100,
     editable: false,
+    sortComparator: (v1, v2) => v1.heroName.localeCompare(v2.heroName),
     renderCell: params => (
       <Image
         width={50}
@@ -64,46 +69,63 @@ const columns = [
   {
     field: 'radiantHeros',
     headerName: 'Radiant',
-    width: 250,
     editable: false,
+    disableColumnMenu: true,
+    sortable: false,
+    width: 300,
     renderCell: params => getTeamIconList(params.value),
   },
   {
     field: 'direHeros',
-    headerName: 'Dire',
-    width: 250,
     editable: false,
+    disableColumnMenu: true,
+    sortable: false,
+    width: 300,
     renderCell: params => getTeamIconList(params.value),
   },
   {
     field: 'items',
     headerName: 'Item Build',
-    width: 325,
+    width: 750,
+    sortable: false,
+    disableColumnMenu: true,
     editable: false,
     renderCell: params => getItemIconList(params.value),
   },
   {
     field: 'skills',
     headerName: 'Skill build',
-    width: 325,
+    sortable: false,
+    minWidth: 600,
+    disableColumnMenu: true,
     editable: false,
     renderCell: params => getItemIconList(params.value),
   },
   {
     field: 'result',
     headerName: 'Result',
-    height: 100,
-    width: 100,
+    width: 150,
     editable: false,
+  },
+  {
+    field: 'id',
+    headerName: 'Details',
+    width: 200,
+    filterable: false,
+    disableColumnMenu: true,
+    sortable: false,
+    editable: false,
+    renderCell: params => (
+      <Link target="_blank" href={getStratzLink(params.value)}>
+        <Button variant="contained">Get Details</Button>
+      </Link>
+    ),
   },
 ];
 
-{
-}
-
 export default function ReplayResultsTableMUI({ data }) {
   return (
-    <Box sx={{ height: 1000, width: 'auto' }}>
+    <Box sx={{ height: 1000, width: '100%' }}>
       <DataGrid
         rows={data}
         columns={columns}

@@ -25,40 +25,42 @@ export default function ProSelector({ proList }) {
   }
 
   return (
-    <Container maxWidth="lg">
-      <Stack direction="column" justifyContent="center" alignItems="center">
-        <Stack
-          direction="row"
-          justifyContent="center"
-          alignItems="center"
-          spacing={2}
+    <Stack
+      width="100%"
+      direction="column"
+      justifyContent="center"
+      alignItems="center"
+    >
+      <Stack
+        direction="row"
+        justifyContent="center"
+        alignItems="center"
+        spacing={2}
+      >
+        <MultipleSelect
+          data={proList}
+          onMultiSelectChange={data => {
+            setSelectedPros(data);
+          }}
+        ></MultipleSelect>
+        <Button
+          sx={{
+            p: 2,
+          }}
+          variant="contained"
+          onClick={() => getProPlayerReplays()}
         >
-          <MultipleSelect
-            data={proList}
-            onMultiSelectChange={data => {
-              setSelectedPros(data);
-            }}
-          ></MultipleSelect>
-          <Button
-            sx={{
-              p: 2,
-            }}
-            variant="contained"
-            onClick={() => getProPlayerReplays()}
-          >
-            Get Replays
-          </Button>
-        </Stack>
-        {isMutating && (
-          <LinearProgress
-            sx={{
-              width: 800,
-            }}
-          />
-        )}
-        {/* {data && <ReplayResultsTable data={data} />} */}
-        {data && <ReplayResultsTableMUI data={data} />}
+          Get Replays
+        </Button>
       </Stack>
-    </Container>
+      {isMutating && (
+        <LinearProgress
+          sx={{
+            width: 800,
+          }}
+        />
+      )}
+      {data && <ReplayResultsTableMUI data={data} />}
+    </Stack>
   );
 }
