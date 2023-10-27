@@ -1,8 +1,8 @@
 import * as React from 'react';
 import Box from '@mui/material/Box';
-import { DataGrid } from '@mui/x-data-grid';
+import { DataGrid, GridToolbar } from '@mui/x-data-grid';
 import Image from 'next/image';
-import { Button, ImageList, ImageListItem, Stack, Grid } from '@mui/material';
+import { Button, Stack, Grid } from '@mui/material';
 import Link from 'next/link';
 
 function getResource(resourceLink) {
@@ -15,12 +15,12 @@ function getStratzLink(matchId) {
 
 function getTeamIconList(items) {
   return (
-    <Stack direction="row">
+    <Stack spacing={0.5} direction="row">
       {items.map(item => (
         <Image
           key={item}
-          width={30}
-          height={30}
+          width={25}
+          height={25}
           alt={item}
           src={getResource(item)}
         />
@@ -31,12 +31,12 @@ function getTeamIconList(items) {
 
 function getItemIconList(items) {
   return (
-    <Grid spacing={1} wrap="wrap" direction="row">
+    <Grid wrap="wrap" direction="row">
       {items.map(item => (
         <Image
           key={item}
-          width={30}
-          height={30}
+          width={25}
+          height={25}
           alt={item.name}
           src={getResource(item.src)}
         />
@@ -49,6 +49,10 @@ const columns = [
   {
     field: 'player',
     headerName: 'Player Name',
+    sortable: true,
+    filterable: true,
+    width: 200,
+    disableColumnMenu: true,
     editable: false,
   },
   {
@@ -56,15 +60,18 @@ const columns = [
     headerName: 'Player Hero',
     width: 100,
     editable: false,
-    sortComparator: (v1, v2) => v1.heroName.localeCompare(v2.heroName),
-    renderCell: params => (
-      <Image
-        width={50}
-        height={50}
-        alt={`${params.value.heroName}`}
-        src={getResource(params.value.heroIcon)}
-      />
-    ),
+    renderCell: params => {
+      const { heroName, heroIcon } = params.row[params.field];
+      return (
+        <Image
+          width={40}
+          height={40}
+          alt={`${heroName}`}
+          src={getResource(heroIcon)}
+        />
+      );
+    },
+    valueGetter: params => params.value.heroName,
   },
   {
     field: 'radiantHeros',
