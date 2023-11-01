@@ -17,7 +17,13 @@ export async function getPubMatchesForProsFromD2PT(playerList) {
             .map((i, row) => {
               const id = $(row).find('td.td-copy a')[0].attribs.data;
               const mmr = $(row).find('td.td-mmr').get()[0].children[0].data;
+              const numberOfPros = $(row).find('td.td-np').get()[0]
+                .children[0].data;
               const heroName = row.attribs.hero;
+              const imp = $(row).find('td.td-imp').get()[0].children[0].data;
+              const duration = $(row).find('td.td-dur').get()[0]
+                .children[0].data;
+
               const heroIcon = $(row)
                 .find('td')
                 .first()
@@ -63,6 +69,9 @@ export async function getPubMatchesForProsFromD2PT(playerList) {
               return {
                 id,
                 mmr,
+                imp,
+                duration,
+                numberOfPros,
                 playerHero: {
                   heroName: heroName,
                   heroIcon: heroIcon,

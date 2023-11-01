@@ -159,6 +159,10 @@ export default function ReplayResultsTablePrimereact({ data }) {
           body={skillsTemplate}
         ></Column>
         <Column field="result" header="Result"></Column>
+        <Column sortable field="mmr" header="MMR"></Column>
+        <Column sortable field="imp" header="IMP"></Column>
+        <Column sortable field="numberOfPros" header="Pros"></Column>
+        <Column field="duration" header="Duration"></Column>
         <Column
           field="id"
           header="Match ID"
