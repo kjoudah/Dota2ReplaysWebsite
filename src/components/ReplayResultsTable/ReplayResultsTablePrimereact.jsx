@@ -74,7 +74,7 @@ export default function ReplayResultsTablePrimereact({ data }) {
   const skillsTemplate = playerData => {
     return (
       <div className="flex flex-row gap-1">
-        {playerData.items.map(skill => (
+        {playerData.skills.map(skill => (
           <Image
             key={skill.name}
             width={30}
