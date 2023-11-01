@@ -1,6 +1,6 @@
 'use client';
-import '@mantine/core/styles.css';
-import { MantineProvider, ColorSchemeScript, AppShell } from '@mantine/core';
+import './theme.css';
+import { PrimeReactProvider } from 'primereact/api';
 
 // export const metadata = {
 //   title: 'Dota 2 Replays',
@@ -10,16 +10,10 @@ import { MantineProvider, ColorSchemeScript, AppShell } from '@mantine/core';
 export default function RootLayout({ children }) {
   return (
     <html lang="en">
-      <head>
-        <ColorSchemeScript />
-      </head>
-      <body>
-        <MantineProvider>
-          <AppShell>
-            <AppShell.Main>{children}</AppShell.Main>
-          </AppShell>
-        </MantineProvider>
-      </body>
+      <head>{/* <ColorSchemeScript /> */}</head>
+      <PrimeReactProvider>
+        <body>{children}</body>
+      </PrimeReactProvider>
     </html>
   );
 }
