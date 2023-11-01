@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { DataTable } from 'primereact/datatable';
 import { Column } from 'primereact/column';
 import { Button } from 'primereact/button';
+import { FilterMatchMode, FilterOperator } from 'primereact/api';
 import Image from 'next/image';
 import Link from 'next/link';
 
@@ -115,16 +116,37 @@ export default function ReplayResultsTablePrimereact({ data }) {
     );
   };
 
+  const [filters, setFilters] = useState({
+    player: { value: null, matchMode: FilterMatchMode.STARTS_WITH },
+    'playerHero.heroName': {
+      value: null,
+      matchMode: FilterMatchMode.STARTS_WITH,
+    },
+  });
+
   return (
     <div className="card">
       <DataTable
+        dataKey="id"
+        filters={filters}
+        filterDisplay="row"
         paginator
-        rows={20}
+        rows={15}
         value={data}
         tableStyle={{ minWidth: '50rem' }}
       >
-        <Column field="player" header="Player name"></Column>
         <Column
+          filter
+          filterPlaceholder="Search by name"
+          showFilterMenu={false}
+          field="player"
+          header="Player name"
+        ></Column>
+        <Column
+          filter
+          filterPlaceholder="Search by hero"
+          showFilterMenu={false}
+          filterField="playerHero.heroName"
           field="playerHero"
           header="Player Hero"
           body={playerHeroTemplate}
