@@ -124,11 +124,38 @@ export default function ReplayResultsTable({ data }) {
     },
   });
 
+  const heroCounts = Array.from(
+    data
+      .map(item => item.playerHero.heroIcon)
+      .reduce((acc, e) => acc.set(e, (acc.get(e) || 0) + 1), new Map())
+  )
+    .map(([key, value]) => ({ key, value }))
+    .sort((a, b) => b.value - a.value);
+
+  const footer = (
+    <div className="flex flex-row flex-wrap px-8">
+      {heroCounts.map(({ key, value }) => {
+        return (
+          <div className="flex items-center flex-row mx-2" key={key}>
+            <Image
+              width={25}
+              height={25}
+              alt={`${key}`}
+              src={getResource(key)}
+            />
+            <p>: {value}</p>
+          </div>
+        );
+      })}
+    </div>
+  );
+
   return (
     <div className="card">
       <DataTable
         dataKey="id"
         filters={filters}
+        footer={footer}
         filterDisplay="row"
         paginator
         rows={15}
