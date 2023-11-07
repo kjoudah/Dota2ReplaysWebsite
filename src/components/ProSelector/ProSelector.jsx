@@ -5,7 +5,7 @@ import useSWRMutation from 'swr/mutation';
 import { MultiSelect } from 'primereact/multiselect';
 import { Button } from 'primereact/button';
 import { ProgressBar } from 'primereact/progressbar';
-import ReplayResultsTablePrimereact from '../ReplayResultsTable/ReplayResultsTablePrimereact';
+import ReplayResultsTable from '../ReplayResultsTable/ReplayResultsTable';
 
 const fetcher = (...args) => fetch(...args).then(res => res.json());
 
@@ -51,7 +51,7 @@ export default function ProSelector({ proList }) {
         )}
       </div>
 
-      {data && <ReplayResultsTablePrimereact data={data} />}
+      {data && <ReplayResultsTable data={data} />}
     </div>
   );
 }
