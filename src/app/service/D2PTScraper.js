@@ -1,7 +1,6 @@
 import * as cheerio from 'cheerio';
 
 export async function getPubMatchesForProsFromD2PT(playerList) {
-  const urlRegex = /background-image:url\('([^']+)'\);/;
   return Promise.all(
     playerList.map(player => {
       return fetch(
@@ -23,6 +22,16 @@ export async function getPubMatchesForProsFromD2PT(playerList) {
               const imp = $(row).find('td.td-imp').get()[0].children[0].data;
               const duration = $(row).find('td.td-dur').get()[0]
                 .children[0].data;
+              const startingItems = $(row)
+                .find('.item-inventory-start .item-row .inventory-item')
+                .get()
+                .map(item => {
+                  const url = item.attribs.style.split(`('`)[1].split(`')`)[0];
+                  return {
+                    url,
+                    name: url.split('/')[3].slice(0, -4),
+                  };
+                });
 
               const heroIcon = $(row)
                 .find('td')
@@ -50,9 +59,11 @@ export async function getPubMatchesForProsFromD2PT(playerList) {
                 .get()
                 .map(item => {
                   const url = item.attribs.style.split(`('`)[1].split(`')`)[0];
+                  const timing = item.children[0].data.trim();
                   return {
                     name: item.attribs.title,
                     src: url,
+                    timing,
                   };
                 });
 
@@ -82,6 +93,7 @@ export async function getPubMatchesForProsFromD2PT(playerList) {
                 result: matchResult,
                 items,
                 skills,
+                startingItems,
               };
             })
             .get();

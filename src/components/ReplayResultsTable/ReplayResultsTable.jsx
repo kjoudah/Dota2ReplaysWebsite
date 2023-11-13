@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { DataTable } from 'primereact/datatable';
 import { Column } from 'primereact/column';
 import { Button } from 'primereact/button';
+import { Card } from 'primereact/card';
 import { FilterMatchMode, FilterOperator } from 'primereact/api';
 import Image from 'next/image';
 import Link from 'next/link';
@@ -55,17 +56,37 @@ export default function ReplayResultsTable({ data }) {
     );
   };
 
-  const itemsTemplate = playerData => {
+  const startingItemsTemplate = playerData => {
     return (
-      <div className="flex flex-row gap-1">
-        {playerData.items.map(item => (
+      <div className="flex flex-row gap-1 w-32 flex-wrap">
+        {playerData.startingItems.map(item => (
           <Image
             key={item.name}
             width={30}
             height={30}
             alt={item.name}
-            src={getResource(item.src)}
+            src={getResource(item.url)}
           />
+        ))}
+      </div>
+    );
+  };
+
+  const itemsTemplate = playerData => {
+    return (
+      <div className="flex flex-row gap-2">
+        {playerData.items.map(item => (
+          <div className="relative" key={item.name}>
+            <i className="text-xs font-bold absolute top-0 right-0">
+              {item.timing}
+            </i>
+            <Image
+              width={35}
+              height={35}
+              alt={item.name}
+              src={getResource(item.src)}
+            />
+          </div>
         ))}
       </div>
     );
@@ -151,7 +172,7 @@ export default function ReplayResultsTable({ data }) {
   );
 
   return (
-    <div className="card">
+    <Card>
       <DataTable
         dataKey="id"
         filters={filters}
@@ -164,21 +185,40 @@ export default function ReplayResultsTable({ data }) {
       >
         <Column
           filter
-          filterPlaceholder="Search by name"
+          filterPlaceholder="Filter by name"
           showFilterMenu={false}
+          style={{
+            width: `200px`,
+          }}
+          bodyStyle={{
+            textAlign: 'center',
+          }}
+          align="center"
           field="player"
           header="Player name"
         ></Column>
         <Column
           filter
-          filterPlaceholder="Search by hero"
+          filterPlaceholder="Filter by hero"
           showFilterMenu={false}
           filterField="playerHero.heroName"
           field="playerHero"
           header="Player Hero"
+          style={{
+            width: `200px`,
+          }}
+          bodyStyle={{
+            alignItems: 'center',
+          }}
+          align="center"
           body={playerHeroTemplate}
         ></Column>
         <Column field="playerHero" body={draftTemplate}></Column>
+        <Column
+          field="startingItems"
+          header="Starting items"
+          body={startingItemsTemplate}
+        ></Column>
         <Column field="items" header="Items" body={itemsTemplate}></Column>
         <Column
           field="skills"
@@ -197,6 +237,6 @@ export default function ReplayResultsTable({ data }) {
         ></Column>
         <Column field="id" body={getDetailsTemplate}></Column>
       </DataTable>
-    </div>
+    </Card>
   );
 }
