@@ -4,7 +4,10 @@ import ProSelector from '@/components/ProSelector/ProSelector';
 const proList = [
   {
     label: 'Safelane',
-    players: [{ label: 'Yatoro', value: ['Yatoro', 'Yatoro (smurf)'] }],
+    players: [
+      { label: 'Yatoro', value: ['Yatoro', 'Yatoro (smurf)'] },
+      { label: 'Butterfly', value: ['Butterfly'] }
+    ],
   },
   {
     label: 'Mid',
