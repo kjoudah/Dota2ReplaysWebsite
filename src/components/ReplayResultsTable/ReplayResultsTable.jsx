@@ -1,11 +1,11 @@
-import React, { useState, useEffect } from 'react';
-import { DataTable } from 'primereact/datatable';
-import { Column } from 'primereact/column';
-import { Button } from 'primereact/button';
-import { Card } from 'primereact/card';
-import { FilterMatchMode, FilterOperator } from 'primereact/api';
-import Image from 'next/image';
-import Link from 'next/link';
+import React, { useState, useEffect } from "react";
+import { DataTable } from "primereact/datatable";
+import { Column } from "primereact/column";
+import { Button } from "primereact/button";
+import { Card } from "primereact/card";
+import { FilterMatchMode, FilterOperator } from "primereact/api";
+import Image from "next/image";
+import Link from "next/link";
 
 export default function ReplayResultsTable({ data }) {
   function getResource(resourceLink) {
@@ -16,9 +16,21 @@ export default function ReplayResultsTable({ data }) {
     return `https://stratz.com/matches/${matchId}`;
   }
 
-  const playerHeroTemplate = playerData => {
+  const playerNameTemplate = (playerData) => {
+    return (
+      <p
+        className={`${
+          playerData.result == "Lost" ? "text-red-600" : "text-green-600"
+        } text-center`}>
+        {playerData.player}
+      </p>
+    );
+  };
+
+  const playerHeroTemplate = (playerData) => {
     return (
       <Image
+        className="mx-auto"
         width={40}
         height={40}
         alt={`${playerData.playerHero.heroName}`}
@@ -27,26 +39,26 @@ export default function ReplayResultsTable({ data }) {
     );
   };
 
-  const draftTemplate = playerData => {
+  const draftTemplate = (playerData) => {
     return (
-      <div className="flex flex-col gap-1">
+      <div className="flex flex-col gap-1 w-[150px] mx-auto">
         <div className="flex flex-row gap-1">
-          {playerData.radiantHeros.map(hero => (
+          {playerData.radiantHeros.map((hero) => (
             <Image
               key={hero}
-              width={30}
-              height={30}
+              width={40}
+              height={40}
               alt={hero}
               src={getResource(hero)}
             />
           ))}
         </div>
         <div className="flex flex-row gap-1">
-          {playerData.direHeros.map(hero => (
+          {playerData.direHeros.map((hero) => (
             <Image
               key={hero}
-              width={30}
-              height={30}
+              width={40}
+              height={40}
               alt={hero}
               src={getResource(hero)}
             />
@@ -56,14 +68,14 @@ export default function ReplayResultsTable({ data }) {
     );
   };
 
-  const startingItemsTemplate = playerData => {
+  const startingItemsTemplate = (playerData) => {
     return (
       <div className="flex flex-row gap-1 w-32 flex-wrap">
-        {playerData.startingItems.map(item => (
+        {playerData.startingItems.map((item) => (
           <Image
             key={item.name}
-            width={30}
-            height={30}
+            width={35}
+            height={35}
             alt={item.name}
             src={getResource(item.url)}
           />
@@ -72,10 +84,10 @@ export default function ReplayResultsTable({ data }) {
     );
   };
 
-  const itemsTemplate = playerData => {
+  const itemsTemplate = (playerData) => {
     return (
-      <div className="flex flex-row gap-2">
-        {playerData.items.map(item => (
+      <div className="flex flex-row gap-2 flex-wrap">
+        {playerData.items.map((item) => (
           <div className="relative" key={item.name}>
             <i className="text-xs font-bold absolute top-0 right-0">
               {item.timing}
@@ -92,10 +104,10 @@ export default function ReplayResultsTable({ data }) {
     );
   };
 
-  const skillsTemplate = playerData => {
+  const skillsTemplate = (playerData) => {
     return (
-      <div className="flex flex-row gap-1">
-        {playerData.skills.map(skill => (
+      <div className="flex flex-row gap-1 flex-wrap">
+        {playerData.skills.map((skill) => (
           <Image
             key={skill.name}
             width={30}
@@ -108,7 +120,13 @@ export default function ReplayResultsTable({ data }) {
     );
   };
 
-  const copyMatchIdTemplate = playerData => {
+  const openNewTab = (event) => {
+    const link = getStratzLink(event.data.id);
+    const tab = window.open(link, "_blank");
+    tab.focus();
+  };
+
+  const copyMatchIdTemplate = (playerData) => {
     return (
       <Button text onClick={() => navigator.clipboard.writeText(playerData.id)}>
         <svg
@@ -117,8 +135,7 @@ export default function ReplayResultsTable({ data }) {
           viewBox="0 0 24 24"
           strokeWidth={1.5}
           stroke="currentColor"
-          className="w-6 h-6"
-        >
+          className="w-6 h-6">
           <path
             strokeLinecap="round"
             strokeLinejoin="round"
@@ -129,7 +146,7 @@ export default function ReplayResultsTable({ data }) {
     );
   };
 
-  const getDetailsTemplate = playerData => {
+  const getDetailsTemplate = (playerData) => {
     return (
       <Link target="_blank" href={getStratzLink(playerData.id)}>
         <Button variant="contained">Get Details</Button>
@@ -139,7 +156,7 @@ export default function ReplayResultsTable({ data }) {
 
   const [filters, setFilters] = useState({
     player: { value: null, matchMode: FilterMatchMode.STARTS_WITH },
-    'playerHero.heroName': {
+    "playerHero.heroName": {
       value: null,
       matchMode: FilterMatchMode.STARTS_WITH,
     },
@@ -147,7 +164,7 @@ export default function ReplayResultsTable({ data }) {
 
   const heroCounts = Array.from(
     data
-      .map(item => item.playerHero.heroIcon)
+      .map((item) => item.playerHero.heroIcon)
       .reduce((acc, e) => acc.set(e, (acc.get(e) || 0) + 1), new Map())
   )
     .map(([key, value]) => ({ key, value }))
@@ -175,67 +192,73 @@ export default function ReplayResultsTable({ data }) {
     <Card>
       <DataTable
         dataKey="id"
+        rowHover={true}
         filters={filters}
+        onRowClick={(e) => openNewTab(e)}
         footer={footer}
         filterDisplay="row"
         paginator
         rows={15}
-        value={data}
-        tableStyle={{ minWidth: '50rem' }}
-      >
+        value={data}>
         <Column
+          headerClassName="max-w-[100px]"
+          className="max-w-[100px]"
           filter
           filterPlaceholder="Filter by name"
           showFilterMenu={false}
-          style={{
-            width: `200px`,
-          }}
-          bodyStyle={{
-            textAlign: 'center',
-          }}
-          align="center"
-          field="player"
-          header="Player name"
-        ></Column>
+          body={playerNameTemplate}
+          header="Player name"></Column>
+
         <Column
+          className="max-w-[75px]"
+          headerClassName="max-w-[75px] "
           filter
           filterPlaceholder="Filter by hero"
           showFilterMenu={false}
           filterField="playerHero.heroName"
           field="playerHero"
           header="Player Hero"
-          style={{
-            width: `200px`,
-          }}
-          bodyStyle={{
-            alignItems: 'center',
-          }}
-          align="center"
-          body={playerHeroTemplate}
-        ></Column>
-        <Column field="playerHero" body={draftTemplate}></Column>
+          body={playerHeroTemplate}></Column>
+
         <Column
+          alignHeader="center"
+          header="Draft"
+          field="playerHero"
+          body={draftTemplate}></Column>
+        <Column
+          className="hidden lg:table-cell min-w-[200px]"
+          headerClassName="hidden lg:table-cell min-w-[200px]"
           field="startingItems"
           header="Starting items"
-          body={startingItemsTemplate}
-        ></Column>
-        <Column field="items" header="Items" body={itemsTemplate}></Column>
+          alignHeader="center"
+          body={startingItemsTemplate}></Column>
+
         <Column
+          className="hidden lg:table-cell"
+          headerClassName="hidden lg:table-cell"
+          field="items"
+          bodyStyle={{
+            minWidth: "200px",
+          }}
+          header="Items"
+          body={itemsTemplate}></Column>
+
+        <Column
+          className="hidden xl:table-cell"
+          headerClassName="hidden xl:table-cell"
           field="skills"
+          bodyStyle={{
+            minWidth: "200px",
+          }}
           header="Skill build"
-          body={skillsTemplate}
-        ></Column>
-        <Column field="result" header="Result"></Column>
-        <Column sortable field="mmr" header="MMR"></Column>
-        <Column sortable field="imp" header="IMP"></Column>
-        <Column sortable field="numberOfPros" header="Pros"></Column>
-        <Column field="duration" header="Duration"></Column>
+          body={skillsTemplate}></Column>
+
         <Column
+          className="hidden md:table-cell"
+          headerClassName="hidden md:table-cell"
           field="id"
           header="Match ID"
-          body={copyMatchIdTemplate}
-        ></Column>
-        <Column field="id" body={getDetailsTemplate}></Column>
+          body={copyMatchIdTemplate}></Column>
       </DataTable>
     </Card>
   );
