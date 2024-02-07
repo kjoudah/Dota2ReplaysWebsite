@@ -1,29 +1,14 @@
-import { PrismaClient } from "@prisma/client";
+import { getAllPlayers } from "../db";
 import { NextResponse } from "next/server";
 
-const prisma = new PrismaClient();
 export async function GET() {
-  const qwe = await prisma.role.findMany({
-    select: {
-      name: true,
-      players: {
-        select: {
-          name: true,
-          aliases: {
-            select: {
-              name: true,
-            },
-          },
-        },
-      },
-    },
-  });
+  const { data } = await getAllPlayers();
 
-  const players = qwe.map((role) => ({
+  const players = data.map((role) => ({
     label: role.name,
     players: role.players.map((player) => ({
-      label: player.name,
-      value: player.aliases.map((alias) => alias.name),
+      label: player,
+      value: player,
     })),
   }));
   return NextResponse.json(players);
