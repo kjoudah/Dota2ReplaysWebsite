@@ -2,6 +2,7 @@
 import ProSelector from "@/components/ProSelector/ProSelector";
 import { useEffect, useState } from "react";
 
+export const revalidate = 3600;
 export default function HomePage() {
   const [proList, setProList] = useState(null);
   useEffect(async () => {
