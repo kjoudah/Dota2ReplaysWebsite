@@ -5,7 +5,6 @@ import { Button } from "primereact/button";
 import { Card } from "primereact/card";
 import { FilterMatchMode, FilterOperator } from "primereact/api";
 import Image from "next/image";
-import Link from "next/link";
 
 export default function ReplayResultsTable({ data }) {
   function getResource(resourceLink) {
@@ -40,10 +39,12 @@ export default function ReplayResultsTable({ data }) {
   };
 
   const draftTemplate = (playerData) => {
+    const radiantHeroes = playerData.draft.slice(0, 5);
+    const direHeroes = playerData.draft.slice(5);
     return (
       <div className="flex flex-col gap-1 w-[150px] mx-auto">
         <div className="flex flex-row gap-1">
-          {playerData.radiantHeros.map((hero) => (
+          {radiantHeroes.map((hero) => (
             <Image
               key={hero}
               width={40}
@@ -54,7 +55,7 @@ export default function ReplayResultsTable({ data }) {
           ))}
         </div>
         <div className="flex flex-row gap-1">
-          {playerData.direHeros.map((hero) => (
+          {direHeroes.map((hero) => (
             <Image
               key={hero}
               width={40}
@@ -146,20 +147,13 @@ export default function ReplayResultsTable({ data }) {
     );
   };
 
-  const getDetailsTemplate = (playerData) => {
-    return (
-      <Link target="_blank" href={getStratzLink(playerData.id)}>
-        <Button variant="contained">Get Details</Button>
-      </Link>
-    );
-  };
-
   const [filters, setFilters] = useState({
     player: { value: null, matchMode: FilterMatchMode.STARTS_WITH },
     "playerHero.heroName": {
       value: null,
       matchMode: FilterMatchMode.STARTS_WITH,
     },
+    draft: { value: null, matchMode: FilterMatchMode.CONTAINS },
   });
 
   const heroCounts = Array.from(
@@ -201,17 +195,18 @@ export default function ReplayResultsTable({ data }) {
         rows={15}
         value={data}>
         <Column
-          headerClassName="max-w-[100px]"
-          className="max-w-[100px]"
+          headerClassName="max-w-[125px]"
+          className="max-w-[125px]"
           filter
+          align="center"
           filterPlaceholder="Filter by name"
           showFilterMenu={false}
           body={playerNameTemplate}
           header="Player name"></Column>
 
         <Column
-          className="max-w-[75px]"
-          headerClassName="max-w-[75px] "
+          className="max-w-[100px]"
+          headerClassName="max-w-[100px] "
           filter
           filterPlaceholder="Filter by hero"
           showFilterMenu={false}
@@ -221,9 +216,13 @@ export default function ReplayResultsTable({ data }) {
           body={playerHeroTemplate}></Column>
 
         <Column
+          className="w-[300px]"
+          headerClassName="w-[300px] "
           alignHeader="center"
           header="Draft"
-          field="playerHero"
+          filter
+          showFilterMenu={false}
+          filterField="draft"
           body={draftTemplate}></Column>
         <Column
           className="hidden lg:table-cell min-w-[200px]"
