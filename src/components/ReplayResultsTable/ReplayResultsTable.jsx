@@ -195,18 +195,19 @@ export default function ReplayResultsTable({ data }) {
         rows={15}
         value={data}>
         <Column
-          headerClassName="max-w-[125px]"
-          className="max-w-[125px]"
+          className="min-w-[100px]"
+          headerClassName="min-w-[100px]"
           filter
           align="center"
+          filterField="player"
           filterPlaceholder="Filter by name"
           showFilterMenu={false}
           body={playerNameTemplate}
           header="Player name"></Column>
 
         <Column
-          className="max-w-[100px]"
-          headerClassName="max-w-[100px] "
+          className="min-w-[100px]"
+          headerClassName="min-w-[100px]"
           filter
           filterPlaceholder="Filter by hero"
           showFilterMenu={false}
